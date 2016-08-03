@@ -1,0 +1,7 @@
+[ 2016-06-15T20:28:59+08:00 ] 127.0.0.1 /index.php?g=user&m=index&a=is_login
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000958s ]
+INFO: Run Behavior\CheckLangBehavior [ RunTime:0.002636s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.004547s ]
+NOTIC: [8] Undefined index: url F:\php\sleeplessFlower\application\Common\Controller\AppframeController.class.php 第 24 行.
+

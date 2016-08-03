@@ -1,0 +1,8 @@
+[ 2016-06-16T10:19:49+08:00 ] 127.0.0.1 /index.php/Api/Login/login
+ERR: 1146:Table 'thinkcmf.sl_user' doesn't exist
+ [ SQL语句 ] : SHOW COLUMNS FROM `sl_user`
+
+[ 2016-06-16T10:20:47+08:00 ] 127.0.0.1 /index.php/Api/Login/login
+ERR: 1146:Table 'thinkcmf.sl_user' doesn't exist
+ [ SQL语句 ] : SHOW COLUMNS FROM `sl_user`
+

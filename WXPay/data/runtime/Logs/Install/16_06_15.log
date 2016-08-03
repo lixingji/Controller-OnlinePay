@@ -1,0 +1,24 @@
+[ 2016-06-15T20:27:03+08:00 ] 127.0.0.1 /index.php?g=install&a=testdbpwd
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000877s ]
+INFO: Run Behavior\CheckLangBehavior [ RunTime:0.002363s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.004184s ]
+NOTIC: [8] Undefined index: db_name F:\php\sleeplessFlower\simplewind\Core\Library\Think\Db.class.php 第 68 行.
+SQL: show databases; [ RunTime:0.0265s ]
+
+[ 2016-06-15T20:27:16+08:00 ] 127.0.0.1 /index.php?g=install&a=testdbpwd
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000891s ]
+INFO: Run Behavior\CheckLangBehavior [ RunTime:0.002655s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.004474s ]
+NOTIC: [8] Undefined index: db_name F:\php\sleeplessFlower\simplewind\Core\Library\Think\Db.class.php 第 68 行.
+SQL: show databases; [ RunTime:0.0008s ]
+
+[ 2016-06-15T20:27:49+08:00 ] 127.0.0.1 /index.php?g=install&a=testdbpwd
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000871s ]
+INFO: Run Behavior\CheckLangBehavior [ RunTime:0.002455s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.004259s ]
+NOTIC: [8] Undefined index: db_name F:\php\sleeplessFlower\simplewind\Core\Library\Think\Db.class.php 第 68 行.
+SQL: show databases; [ RunTime:0.0009s ]
+

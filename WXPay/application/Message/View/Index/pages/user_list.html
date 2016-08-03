@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="花未眠汽配，拆车件，新车件，车辆品牌">
+    <meta name="author" content="">
+</head>
+
+<body>
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">用户列表</h1>
+
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<div class="row">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            用户列表
+        </div>
+        <!-- /.panel-heading -->
+        <div class="panel-body">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>用户名</th>
+                        <th>身份</th>
+                        <th>最后一次登录ip</th>
+                        <th>最后一次登录时间</th>
+                        <th>当前状态</th>
+                        <th>操作是否允许查看修理厂</th>
+                    </tr>
+                    </thead>
+                    <tbody id="_id_user_list_tr">
+
+                    </tbody>
+                </table>
+            </div>
+            <ul class="pagination">
+                <li onclick="prevPage()"><a>上一页</a></li>
+                <li onclick="nextPage()"><a>下一页</a></li>
+                </ul>
+            <!-- /.table-responsive -->
+        </div>
+        <!-- /.panel-body -->
+    </div>
+    <!-- /.panel -->
+</div>
+<script>
+    var pageIndex=0;
+    var totalSize=0;
+    $(function () {
+        getUserList();//初始加载
+    });
+
+    function getUserList() {
+        var url = preUrl + "Message/Login/queryUserList";
+        function success_callback(data){
+            if(data.result.state==1){
+                totalSize=data.count;
+                var msg=data.data;
+                var size=msg.length;
+                var tempStr='';
+                for(var i=0;i<size;i++){
+                    tempStr+="<tr><td>"+(i+1)+"</td>";
+                    tempStr+="<td>"+msg[i].username+"</td>";
+                    tempStr+="<td>"+(msg[i].role==1?"修理厂":"汽配档口")+"</td>";
+                    tempStr+="<td>"+(msg[i].last_login_ip?msg[i].last_login_ip:"无")+"</td>";
+                    tempStr+="<td>"+(msg[i].last_login_time?msg[i].last_login_time:"无")+"</td>";
+                    tempStr+="<td>"+(msg[i].can_see_factory==1?"可看修理厂":"不可看修理厂")+"</td>";
+                    tempStr+="<td>"+"<span class='label label-info' onclick='permitToFactory(1,"+msg[i].id+")'>允许</span>&nbsp;";
+                    tempStr+="<span class='label label-warning' onclick='permitToFactory(2,"+msg[i].id+")'>不允许</span>&nbsp;";
+                    tempStr+="<span class='label label-danger' onclick='permitToFactory(3,"+msg[i].id+")'>删除用户</span>"+"</td></tr>";
+                }
+                $("#_id_user_list_tr").html(tempStr);
+            }
+
+            layer.msg(data.result.description);
+        }
+        postRequest(url, {
+            'token': localStorage.token,
+            'pageSize': 10,
+            'pageIndex':pageIndex
+        }, success_callback);
+    }
+
+    function permitToFactory(num,userId){
+        var url = preUrl + "Message/Login/deleteUser";
+        //num 1允许  2不允许  3删除
+        postRequest(url, {
+            'token': localStorage.token,
+            'num': num,
+            'userId':userId
+        }, function (data) {
+            layer.msg(data.result.description);
+            if(data.result.state==1){
+                setTimeout(function () {
+                    getUserList();
+                },1000);
+            }
+
+        });
+    }
+
+    function  prevPage(){
+        if(pageIndex>0)
+        pageIndex-=1;
+        else{
+            layer.msg("当前已经是第一页了");
+            return;
+        }
+        getUserList();
+    }
+
+    function  nextPage(){
+        var rest=totalSize%10;
+        var totalpage=0;
+        if(rest>0){
+            totalpage=totalSize/10;
+        }else{
+            totalpage=totalSize/10-1;
+        }
+        if(pageIndex<totalpage-1){
+            pageIndex+=1;
+        }else{
+            layer.msg("当前已经是最后一页了");
+            return;
+        }
+        getUserList();
+    }
+</script>
+</body>
+
+</html>

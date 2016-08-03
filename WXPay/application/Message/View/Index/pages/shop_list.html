@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="花未眠汽配，拆车件，新车件，车辆品牌">
+    <meta name="author" content="">
+</head>
+
+<body>
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">商店列表</h1>
+
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+
+            <div class="row">
+
+        <!-- /.col-lg-6 -->
+                <div class="col-lg-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            商店列表
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>商家名称</th>
+                                            <th>客户地址</th>
+                                            <th>图片</th>
+                                            <th>操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody  id="_id_shop_list_tr">
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                            <ul class="pagination">
+                                <li onclick="prevPage()"><a>上一页</a></li>
+                                <li onclick="nextPage()"><a>下一页</a></li>
+                            </ul>
+                            <!-- /.table-responsive -->
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>
+                <!-- /.col-lg-6 -->
+                </div>
+            <!-- /.row -->
+<script>
+    var pageIndex=0;
+    var totalSize=0;
+    $(function () {
+        getShopList();//初始加载
+    });
+
+    function getShopList() {
+        var url = preUrl + "Message/Shop/queryShopList";
+        function success_callback(data){
+            if(data.result.state==1){
+                totalSize=data.count;
+                var msg=data.data;
+                var size=msg.length;
+                var tempStr='';
+                for(var i=0;i<size;i++){
+                    tempStr+="<tr><td>"+(i+1)+"</td>";
+                    tempStr+="<td>"+msg[i].name+"</td>";
+                    tempStr+="<td>"+msg[i].address+"</td>";
+                    tempStr+="<td><a href='"+msg[i].icon+"' target='_blank'><u>"+"查看图片"+"</u></a></td>";
+                    tempStr+="<td>"+"<span class='label label-info' onclick='permitToDetail("+msg[i].id+")'>更多详情</span>&nbsp;";
+                    tempStr+="<span class='label label-danger' onclick='deleteShop("+msg[i].id+")'>删除</span>"+"</td></tr>";
+                }
+                $("#_id_shop_list_tr").html(tempStr);
+            }
+
+            layer.msg(data.result.description);
+        }
+        postRequest(url, {
+            'token': localStorage.token,
+            'pageSize': 10,
+            'pageIndex':pageIndex
+        }, success_callback);
+    }
+
+    function  prevPage(){
+        if(pageIndex>0)
+            pageIndex-=1;
+        else{
+            layer.msg("当前已经是第一页了");
+            return;
+        }
+        getShopList();
+    }
+
+    function  nextPage(){
+        var rest=totalSize%10;
+        var totalpage=0;
+        if(rest>0){
+            totalpage=totalSize/10;
+        }else{
+            totalpage=totalSize/10-1;
+        }
+        if(pageIndex<totalpage-1){
+            pageIndex+=1;
+        }else{
+            layer.msg("当前已经是最后一页了");
+            return;
+        }
+        getShopList();
+    }
+
+    function deleteShop(id){
+        var url = preUrl + "Message/Shop/deleteShop";
+        postRequest(url, {
+            'token': localStorage.token,
+            'shopId':id
+        }, function (data) {
+            layer.msg(data.result.description);
+            if(data.result.state==1){
+                setTimeout(function () {
+                    getShopList();
+                },1000);
+            }
+        });
+    }
+
+    function permitToDetail(id){
+        $(".myPage").load('shopInfo.html');
+        sessionStorage.shopId=id;
+//        location.href= preUrl + "Message/Index/shopInfo?id="+id;
+    }
+</script>
+    </body>
+
+</html>

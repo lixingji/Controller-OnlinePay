@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="花未眠汽配，拆车件，新车件，车辆品牌">
+    <meta name="author" content="">
+</head>
+
+<body>
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">统计记录详情列表</h1>
+
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+
+<div class="row">
+
+    <!-- /.col-lg-6 -->
+    <div class="col-lg-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                商店：<strong id="_id_myshop_name"></strong>
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>总点击次数</th>
+                            <th>客户ip</th>
+                            <th>客户地址</th>
+                            <th>点击时间</th>
+                        </tr>
+                        </thead>
+                        <tbody id="_id_record_list">
+
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.table-responsive -->
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+    </div>
+    <!-- /.col-lg-6 -->
+</div>
+<!-- /.row -->
+<script>
+    var pageIndex=0;
+    var url = preUrl + "Message/Shop/queryRecordDetail";
+    function success_callback(data){
+        if(data.result.state==1){
+
+            totalSize=data.count;
+            var msg=data.data;
+            var size=msg.length;
+            var tempStr='';
+            $("#_id_myshop_name").html(msg[0].shop_name);
+            for(var i=0;i<size;i++){
+                tempStr+="<tr><td>"+(i+1)+"</td>";
+                tempStr+="<td>"+data.count+"</td>";
+                tempStr+="<td>"+msg[i].client_ip+"</td>";
+                tempStr+="<td>"+msg[i].client_address+"</td>";
+                tempStr+="<td>"+msg[i].client_click_time+"</td></tr>";
+            }
+            $("#_id_record_list").html(tempStr);
+        }
+
+        layer.msg(data.result.description);
+    }
+    postRequest(url, {
+        'shopId': localStorage.shopId,
+        'pageSize': 10,
+        'pageIndex':pageIndex
+    }, success_callback);
+
+    function permitToDetail(shopId,shopName){
+        localStorage.shopId=shopId;
+        localStorage.shopName=shopName;
+        location.href="recordMoreDetail";
+    }
+</script>
+</body>
+
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="花未眠汽配，拆车件，新车件，车辆品牌">
+    <meta name="author" content="">
+
+</head>
+
+<body>
+<!--
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">添加商店</h1>
+            </div>
+            &lt;!&ndash; /.col-lg-12 &ndash;&gt;
+        </div>-->
+<div class="login-panel panel panel-default" style="margin-top: 10px;">
+    <div class="panel-heading">
+        <h3 class="panel-title">商店详细信息如下：</h3>
+    </div>
+    <div class="panel-body">
+        <form  role="form" action="" id="_id_shop_form" method="post" enctype="multipart/form-data">
+            <fieldset>
+                <input style="display: none;" class="form-control" name="shopId" id="_id_shop_id" type="text">
+                <div class="form-group">
+                    <label for="_id_shop_type">类型：</label>
+                    <input class="form-control" placeholder="商店的类型，1是档口新车件，2是档口拆车件，3是修理厂" name="type" id="_id_shop_type" type="text" autofocus>
+                </div>
+                <div class="form-group">
+                    <label for="_id_shop_name">店名：</label>
+                    <input class="form-control" placeholder="请输入修理厂或档口名称" name="name" id="_id_shop_name" type="text" autofocus>
+                </div>
+                <div class="form-group">
+                    <label for="_id_shop_icon">店面图片：</label>
+                    <img src="" id="_id_shop_icon">
+                </div>
+                <div class="form-group">
+                    <label for="_id_shop_description">简介：</label>
+                    <input class="form-control" placeholder="档口或修理厂简介" name="description" id="_id_shop_description" type="text">
+                </div>
+                <div class="form-group">
+                    <label for="_id_shop_address">商店地址：</label>
+                    <input class="form-control" placeholder="档口或修理厂地址" name="address" id="_id_shop_address" type="text">
+                </div>
+                <div class="form-group">
+                    <label for="_id_shop_advance">主营业务：</label>
+                    <input class="form-control" placeholder="主营业务" name="advance" id="_id_shop_advance" type="text">
+                </div>
+                <div class="form-group">
+                    <label for="_id_shop_website">商店个人网址：</label>
+                    <input class="form-control" placeholder="商店个人网址" name="website" id="_id_shop_website" type="text">
+                </div>
+                <div class="form-group">
+                    <label for="_id_shop_shopOrder">排序（默认是1）：</label>
+                    <input class="form-control" placeholder="商店显示的顺序（按1，2，3...排序）" name="shopOrder" id="_id_shop_shopOrder" type="text">
+                </div>
+                <div class="form-group">
+                    <label for="_id_shop_shopPhone">电话号码：</label>
+                    <input class="form-control" placeholder="电话号码（有多个请以逗号隔开，如020XX，07XX）" name="phoneList" id="_id_shop_shopPhone" type="text">
+                </div>
+                <div class="form-group">
+                    <label for="_id_shop_shopMobile">手机号码：</label>
+                    <input class="form-control" placeholder="手机号码（有多个请以逗号隔开，如13XX，15XX）" name="mobileList" id="_id_shop_shopMobile" type="text">
+                </div>
+                <!--<div class="form-group">
+                    <label>商店横幅图片(有就上传，没有可以不上传)：</label>
+                    <input class="form-control" name="imageUrl[]" type="file">
+                    <input class="form-control" name="imageUrl[]" type="file">
+                    <input class="form-control" name="imageUrl[]" type="file">
+                    <input class="form-control" name="imageUrl[]" type="file">
+                </div>-->
+            </fieldset>
+            <input style="display: none;" id="_id_shop_token" type="text" name="token">
+            <!-- Change this to a button or input when using this as a form -->
+            <a id="_id_shop_sure" class="btn btn-lg btn-success btn-block">确认修改</a>
+        </form>
+    </div>
+</div>
+<script>
+    var shopId=sessionStorage.shopId;
+    $(function () {
+        loadData();//加载数据
+        $("#_id_shop_sure").click(function () {
+            $("#_id_shop_id").val(shopId);
+            var shopUrl=preUrl + "Message/Shop/updateShop";
+            $("#_id_shop_form").attr("action",shopUrl);
+            $("#_id_shop_token").attr("value",localStorage.token);
+            $("#_id_shop_form").submit();
+        });
+    });
+
+    function loadData(){
+        var url = preUrl + "Message/Shop/queryShopDetail";
+        postRequest(url, {
+            'token': localStorage.token,
+            'shopId':shopId
+        }, function (data) {
+            layer.msg(data.result.description);
+            if(data.result.state==1){
+                var d =data.data;
+                var type= d.type==1?"新车件":(d.type==2?"拆车件":"修理厂");
+                $("#_id_shop_type").val(type);
+                $("#_id_shop_name").val(d.name);
+                $("#_id_shop_icon").attr("src", d.icon);
+                $("#_id_shop_description").val(d.description);
+                $("#_id_shop_address").val(d.address);
+                $("#_id_shop_advance").val(d.advance);
+                $("#_id_shop_website").val(d.website);
+                $("#_id_shop_shopOrder").val(d.shopOrder);
+                var phone= d.phoneList;
+                var list=phone[0];
+                if(phone.length>1){
+                    for(var i=1;i<phone.length;i++){
+                        list+=","+phone[i];
+                    }
+                }
+                $("#_id_shop_shopPhone").val(list);
+                var mobile= d.mobileList;
+                var mlist=mobile[0];
+                if(mobile.length>1){
+                    for(var i=1;i<mobile.length;i++){
+                        mlist+=","+mobile[i];
+                    }
+                }
+                $("#_id_shop_shopMobile").val(mlist);
+            }
+        });
+    }
+</script>
+</body>
+
+</html>
